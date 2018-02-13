@@ -22,19 +22,33 @@ September 2016.".
 如果键已经存在于字典内，为键所对应的值加上对应数值；
 如果键不存在于字典内，将此键加入字典，并将它的值设为给定值。
 """
-tt_time=0
-num_msg=""
+"""取得各电话的通话总时长"""
+num_totaltime={}
 for call in calls:
+    num_from=call[0]
+    num_to=call[1]
     time=int(call[3])
-    if time>tt_time:
-        nums = []
-        tt_time=time
-        nums.append(call[1])
-    elif time==tt_time and call[1] not in nums:
-        nums.append(call[1])
+    if num_from not in num_totaltime.keys():
+        num_totaltime[num_from]=time
+    else:
+        num_totaltime[num_from]+=time
+    if num_to not in num_totaltime.keys():
+        num_totaltime[num_to]=time
+    else:
+        num_totaltime[num_to]+=time
 
+""""取得最大时长与对应的号码集"""
+nums=[]
+max_totaltime=max(num_totaltime.values())
+for num,time in num_totaltime.items():
+    if time==max_totaltime:
+        nums.append(num)
+
+""""改变号码的展现方式，因为可能存在多个号码"""
+num_msg=""
 for num in nums:
-    num_msg+=num
+    num_msg+=num+" "
 
-msg="{} spent the longest time, {} seconds, on the phone during September 2016.".format(num_msg,tt_time)
+"""输出结果"""
+msg="{}spent the longest time, {} seconds, on the phone during September 2016.".format(num_msg,max_totaltime)
 print(msg)
